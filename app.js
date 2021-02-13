@@ -1,7 +1,4 @@
-var container = document.getElementById('container');
+// how to create interface in typescript
 var todo = {
-    id: 123,
-    name: 'pickup the cloths',
-    completed: true
+    name: 'Pick the cloths'
 };
-var displayName = "Todo #" + todo.id;

@@ -1,17 +1,63 @@
-// how to create interface in typescript
-
-interface Todo { // it is an interface, and it tells that what properties and types a Todo will contain. 
-  name: string;
-  completed?: boolean // '?' it tells that completed property is optional and if it exist then it will be of 'boolean' type.
+// Interface to define the structure of Todo
+interface ITodo{
+  name:string;
+  description: string;
+  completed: boolean;
 }
 
-interface ITodoService { // it is another interface for checking ITodoService.
-  add(todo: Todo) : Todo; // this method will add the item 'todo' that will have the interface of "Todo", and will return the value that will also have the interface of "Todo".
-  delete(todoId: number) : void; // this method will receive the 'todoId' of 'number' type and return 'nothing/void'.
-  getAll() : Todo[]; // this method will return 'array' of 'items' that will have interface of 'Todo'.
-  getById(todoId: number) : Todo; // this method receives the 'todoId' as argument of type 'number' and will return the item that will have the interface of 'Todo'.
+//Class Implementing the interface
+class Todo implements ITodo{
+  constructor(public name: string, public description: string, public completed: boolean){}
+
 }
 
-var todo: Todo = {
-  name : 'Pick the cloths'
+// Class which contains list of Todos and the actions
+class TodoList{
+  public static allTodos: Todo[]= new Array;
+
+  //Create a new Todo Item
+  createTodoItem(name:string,description:string):number {
+      let newItem = new Todo(name,description, false);
+      let totalCount: number = TodoList.allTodos.push(newItem);
+      return totalCount;
+  }
+
+  // returns all the todos
+  allTodoItems():Todo[]{
+      return TodoList.allTodos;
+  }
+}
+
+// window.onload is a pure JS
+window.onload = function(){
+  //HTMLInput Element for Task and description
+  let task= <HTMLInputElement>document.getElementById("todoName");
+  let description = <HTMLInputElement>document.getElementById("todoDescription");
+
+  // added a event listner for add click
+  document.getElementById("add").addEventListener('click',()=>toAlltask(task.value, description.value));    
+}
+
+//Function called when add is clicked
+function toAlltask(task:string, description:string){
+
+  let todo = new TodoList();
+  // adds the task to list
+  todo.createTodoItem(task, description);
+
+  //Fetched the updated list and create a list item for UI
+  let div = <HTMLDivElement>document.getElementById("todoList");
+  let list="<dl class='dl-horizontal'>";
+
+  for(let index=0; index < TodoList.allTodos.length;index++){
+      list = list + " <dt> " + TodoList.allTodos[index].name + ' </dt> <dd>' + TodoList.allTodos[index].description + '</dd>';
+  }
+  list += "</dl>"
+  div.innerHTML = list;
+
+  //Casting
+  (<HTMLInputElement>document.getElementById("todoName")).value = "";
+
+  (<HTMLInputElement>document.getElementById("todoDescription")).value="";
+  
 }
